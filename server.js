@@ -1,3 +1,6 @@
+'use strict';
+
+
 
 // // Express
 // // eslint-disable-next-line strict
@@ -287,10 +290,6 @@
 /////////////////////////////
 
 'use strict';
-
-
-
-
 // get all environment variable you need
 require('dotenv').config();
 const express = require('express');
@@ -311,6 +310,7 @@ const DARKSKY_API_KEY = process.env.DARKSKY_API_KEY;
 const EVENTFUL_API_KEY = process.env.EVENTFUL_API_KEY;
 const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
 const YELP_API_KEY = process.env.YELP_API_KEY;
+
 // Make the app listening
 server.listen(PORT, () => console.log('hello Listening at port 3000'));
 
@@ -496,9 +496,6 @@ function getMoviesData(city) {
 ///////////////// Movies ////////////////
 //////////////////////////////
 /////////////////////
-
-
-
 ///////////////// Yelp ////////////////
 //////////////////////////////
 /////////////////////
@@ -551,26 +548,47 @@ function Yelp(data){
   this.url = data.url;
 }
 
-function yelpHandler(request ,response) {
-  let city = request.query.search_query;
-  getYelpData(city)
+
+///////////////// Yelp ////////////////
+//////////////////////////////
+/////////////////////
+
+server.get('/yelp' , yelpHandler) ;
+
+function yelpHandler (request, response) {
+  let lat = request.query['latitude'] ;
+  let lng = request.query['longitude'] ;
+
+  getYelpData(lat, lng)
     .then((data) => {
-      // eslint-disable-next-line no-undef
       response.status(200).send(data);
     });
 }
 
-function getYelpData (city){
-  // eslint-disable-next-line camelcase
-  const url = `https://api.yelp.com/v3/businesses/search?location=${city}`;
+
+function getYelpData(lat, lng){
+  const url = `https://api.yelp.com/v3/businesses/search?term=restaurant&latitude=${lat}&longitude=${lng}` ;
+  console.log(url)
+  console.log('get data boooy')
   return superagent.get(url)
-    .set('Authorization', `Bearer ${YELP_API_KEY}`)
-    .then((data) =>{
-      console.log('hiiiiiiiiiii' ,data);
-      const output = data.body.businesses.map( (element) => { return new Yelp(element);
-      });
-      return output;
-    });
+    .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`)
+    .then((yelpdata) => {
+      // console.log(yelpdata.body.businesses);
+
+      let yelps = yelpdata.body.businesses.map((business) => {
+        return new Yelp(business) ;
+      })
+      return yelps ;
+    })
+}
+
+
+function Yelp (business) {
+  this.name = business.name ;
+  this.image_url = business.image_url ;
+  this.price = business.price ;
+  this.rating = business.rating ;
+  this.url = business.url ;
 }
 ///////////////// yelp ////////////////
 //////////////////////////////
