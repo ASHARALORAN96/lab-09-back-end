@@ -1,6 +1,13 @@
 
 // Express
 // eslint-disable-next-line strict
+const PORT = process.env.PORT || 3000;
+const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
+const DARKSKY_API_KEY = process.env.DARKSKY_API_KEY;
+const EVENTFUL_API_KEY = process.env.EVENTFUL_API_KEY;
+const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
+const YELP_API_KEY = process.env.YELP_API_KEY;
+
 const express = require('express');
 
 const superagent = require('superagent');
@@ -16,17 +23,13 @@ server.use(cors()); // give access
 
 // get all environment variable you need
 require('dotenv').config();
-const PORT = process.env.PORT || 3000;
-const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
-const DARKSKY_API_KEY = process.env.DARKSKY_API_KEY;
-const EVENTFUL_API_KEY = process.env.EVENTFUL_API_KEY;
-const MOVIE_API_KEY = process.env.MOVIE_API_KEY;
-const YELP_API_KEY = process.env.YELP_API_KEY;
+
 
 // Make the app listening
-server.listen(PORT, () => console.log('Listening at port 3000'));
+// server.listen(PORT, () => console.log('Listening at port 3000'));
 
-
+client.connect().then( () => {server.listen(PORT, () => console.log('Server up on', PORT));});
+client.on('error', error => { throw error; });
 
 server.get('/', (request, response) => {
   response.status(200).send('App is working CLAAAAASS');
@@ -280,5 +283,5 @@ server.use('*', (request, response) => {
 server.use((error, request, response) => {
   response.status(500).send(error);
 });
-client.on('error', error => { throw error; })
-client.connect().then( () => {server.listen(PORT, () => console.log('Server up on', PORT));})
+
+
