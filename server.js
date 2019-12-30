@@ -571,7 +571,7 @@ function getYelpData(lat, lng){
   console.log(url)
   console.log('get data boooy')
   return superagent.get(url)
-    .set('Authorization', `Bearer ${process.env.YELP_API_KEY}`)
+    .set('Authorization', `Bearer ${YELP_API_KEY}`)
     .then((yelpdata) => {
       // console.log(yelpdata.body.businesses);
 
