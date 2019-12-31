@@ -4,8 +4,8 @@
 
 // // Express
 // // eslint-disable-next-line strict
+// require('dotenv').config();
 // const express = require('express');
-
 // const superagent = require('superagent');
 // const server = express();
 // const pg = require('pg');
@@ -18,7 +18,6 @@
 // server.use(cors()); // give access
 
 // // get all environment variable you need
-// require('dotenv').config();
 // const PORT = process.env.PORT || 3000;
 // const GEOCODE_API_KEY = process.env.GEOCODE_API_KEY;
 // const DARKSKY_API_KEY = process.env.DARKSKY_API_KEY;
